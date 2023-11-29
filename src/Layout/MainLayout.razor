@@ -1,0 +1,57 @@
+﻿@inherits LayoutComponentBase
+
+@if (_initialized)
+{
+    <Recrovit.RecroGridFramework.Client.Blazor.Components.DynamicComponentWrapper ComponentType="_libraryWrapper">
+        <header>
+            <div>
+                <AuthorizeView>@_menu</AuthorizeView>
+            </div>
+            <div class="theme-switcher">
+                <LoginDisplay />
+                @if (_themes != null)
+                {
+                    <span>
+                        @_themes
+                    </span>
+                }
+                <select value="@_currentLibrary" @onchange="OnLibrarySelectionChanged">
+                    @foreach (var lib in Libraries)
+                    {
+                        <option value="@lib">@lib</option>
+                    }
+                </select>
+                <select value="@_currentLanguage" @onchange="OnLanguageSelectionChanged">
+                    @foreach (var language in _recroDict.Languages)
+                    {
+                        <option value="@language.Key">@language.Value</option>
+                    }
+                </select>
+            </div>
+        </header>
+        <div class="page">
+            <main>
+                <article class="content">
+                    @Body
+                </article>
+            </main>
+        </div>
+    </Recrovit.RecroGridFramework.Client.Blazor.Components.DynamicComponentWrapper>
+}
+
+<style>
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        margin-top: .5rem;
+    }
+
+    div.theme-switcher {
+        display: flex;
+        gap: .5rem;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+</style>

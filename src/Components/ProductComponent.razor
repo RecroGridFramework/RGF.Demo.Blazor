@@ -1,0 +1,24 @@
+﻿@using Recrovit.RecroGridFramework.Client.Blazor.Parameters;
+@using Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI.Components
+
+<EntityComponent @ref="_productRef" EntityParameters="ProductEntityParameters">
+    <ToolbarTemplate>
+        @*<div>ProductComponent-Toolbar</div>*@
+        <ToolbarComponent EntityParameters="context" />
+    </ToolbarTemplate>
+</EntityComponent>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public RgfEntityParameters EntityParameters { get; set; } = null!;
+
+    public RgfEntityParameters ProductEntityParameters
+    {
+        get
+        {
+            EntityParameters.TitleTemplate = (context) => @<h4>Products</h4>;
+            return EntityParameters;
+        }
+    }
+}
