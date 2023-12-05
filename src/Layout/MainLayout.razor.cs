@@ -79,7 +79,7 @@ public partial class MainLayout
         StateHasChanged();
 
         var prev = _currentLibrary;
-        _currentLanguage = args.Value?.ToString() ?? string.Empty;
+        _currentLibrary = args.Value?.ToString() ?? string.Empty;
         _ = Task.Run(async () =>
         {
             switch (prev)
