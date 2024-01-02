@@ -4,7 +4,7 @@ using Recrovit.RecroGridFramework.Abstraction.Contracts.Services;
 using Recrovit.RecroGridFramework.Client.Blazor.Components;
 using Recrovit.RecroGridFramework.Client.Blazor.Events;
 using Recrovit.RecroGridFramework.Client.Blazor.Parameters;
-using Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI.Components;
+using Recrovit.RecroGridFramework.Client.Blazor.UI.Components;
 
 namespace RGF.Demo.Blazor.Components;
 
