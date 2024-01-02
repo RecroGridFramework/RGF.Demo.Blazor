@@ -1,0 +1,14 @@
+﻿@page "/EntityTest"
+@using Recrovit.RecroGridFramework.Client.Blazor.Parameters
+@using Recrovit.RecroGridFramework.Client.Blazor.UI.Components
+@using RGF.Demo.Blazor.Components
+
+<PageTitle>EntityTest</PageTitle>
+<h2>Entity Test - Blazor UI (Bootstrap only)</h2>
+<hr />
+
+<h4>Entity-Direct</h4>
+<EntityComponent EntityParameters="@(new RgfEntityParameters("RG_Product_1"))" />
+<hr />
+
+<ProductComponent />

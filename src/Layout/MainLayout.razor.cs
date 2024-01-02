@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Recrovit.RecroGridFramework.Abstraction.Contracts.Services;
+using Recrovit.RecroGridFramework.Client.Blazor;
 #if DevExpressEnabled
 using Recrovit.RecroGridFramework.Client.Blazor.DevExpressUI;
 #endif
@@ -11,6 +12,7 @@ using Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI;
 using Recrovit.RecroGridFramework.Client.Blazor.TelerikUI;
 #endif
 using Recrovit.RecroGridFramework.Client.Blazor.UI;
+using RGF.Demo.Blazor.Components;
 
 namespace RGF.Demo.Blazor.Layout;
 
@@ -85,23 +87,24 @@ public partial class MainLayout
             switch (prev)
             {
                 case "Bootstrap":
-                    await Recrovit.RecroGridFramework.Client.Blazor.UI.Configuration.UnloadResourcesAsync(_jsRuntime);
+                    await Recrovit.RecroGridFramework.Client.Blazor.UI.RGFClientBlazorUIConfiguration.UnloadResourcesAsync(_jsRuntime);
+                    RgfBlazorConfiguration.ClearEntityComponentTypes();
                     break;
 #if DevExpressEnabled
                 case "DevExpress":
-                    await Recrovit.RecroGridFramework.Client.Blazor.DevExpressUI.Configuration.UnloadResourcesAsync(_jsRuntime);
+                    await Recrovit.RecroGridFramework.Client.Blazor.DevExpressUI.RGFClientBlazorDevExpressConfiguration.UnloadResourcesAsync(_jsRuntime);
                     break;
 #endif
                 case "Radzen":
-                    await Recrovit.RecroGridFramework.Client.Blazor.RadzenUI.Configuration.UnloadResourcesAsync(_jsRuntime);
+                    await Recrovit.RecroGridFramework.Client.Blazor.RadzenUI.RGFClientBlazorRadzenConfiguration.UnloadResourcesAsync(_jsRuntime);
                     break;
 
                 case "Syncfusion":
-                    await Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI.Configuration.UnloadResourcesAsync(_jsRuntime);
+                    await Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI.RGFClientBlazorSyncfusionConfiguration.UnloadResourcesAsync(_jsRuntime);
                     break;
 #if TelerikEnabled
                 case "Telerik":
-                    await Recrovit.RecroGridFramework.Client.Blazor.TelerikUI.Configuration.UnloadResourcesAsync(_jsRuntime);
+                    await Recrovit.RecroGridFramework.Client.Blazor.TelerikUI.RGFClientBlazorTelerikConfiguration.UnloadResourcesAsync(_jsRuntime);
                     break;
 #endif
             }
@@ -118,31 +121,32 @@ public partial class MainLayout
         switch (_currentLibrary)
         {
             case "Bootstrap":
-                _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.UI.Components.RootComponent);
+                _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.UI.Components.RgfRootComponent);
                 await _serviceProvider.InitializeRgfUIAsync("light");
                 InitComponents(typeof(Recrovit.RecroGridFramework.Client.Blazor.UI.Components.MenuComponent), typeof(Recrovit.RecroGridFramework.Client.Blazor.UI.Components.SetTheme), "light");
+                RegisterEntityComponent();
                 break;
 #if DevExpressEnabled
             case "DevExpress":
-                _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.DevExpressUI.Components.DevExpressRootComponent);
+                _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.DevExpressUI.Components.RgfRootComponent);
                 await _serviceProvider.InitializeRgfDevExpressUIAsync("blazing-berry.bs5");
                 InitComponents(typeof(Recrovit.RecroGridFramework.Client.Blazor.DevExpressUI.Components.MenuComponent), typeof(Recrovit.RecroGridFramework.Client.Blazor.DevExpressUI.Components.SetTheme), "blazing-berry.bs5");
                 break;
 #endif
             case "Radzen":
-                _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.RadzenUI.Components.RadzenRootComponent);
+                _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.RadzenUI.Components.RgfRootComponent);
                 await _serviceProvider.InitializeRgfRadzenUIAsync("default");
                 InitComponents(typeof(Recrovit.RecroGridFramework.Client.Blazor.RadzenUI.Components.MenuComponent), typeof(Recrovit.RecroGridFramework.Client.Blazor.RadzenUI.Components.SetTheme), "default");
                 break;
 
             case "Syncfusion":
-                _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI.Components.SyncfusionRootComponent);
+                _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI.Components.RgfRootComponent);
                 await _serviceProvider.InitializeRgfSyncfusionUIAsync("tailwind");
                 InitComponents(typeof(Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI.Components.MenuComponent), typeof(Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI.Components.SetTheme), "tailwind");
                 break;
 #if TelerikEnabled
             case "Telerik":
-                _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.TelerikUI.Components.TelerikRootComponent);
+                _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.TelerikUI.Components.RgfRootComponent);
                 bool trial = _configuration.GetValue<bool>("Telerik:Trial", true);
                 await _serviceProvider.InitializeRgfTelerikUIAsync("kendo-theme-default/all", trial);
                 InitComponents(typeof(Recrovit.RecroGridFramework.Client.Blazor.TelerikUI.Components.MenuComponent), typeof(Recrovit.RecroGridFramework.Client.Blazor.TelerikUI.Components.SetTheme), "kendo-theme-default/all");
@@ -167,5 +171,11 @@ public partial class MainLayout
             builder.AddAttribute(1, "ThemeName", themeName);
             builder.CloseComponent();
         };
+    }
+
+    public static void RegisterEntityComponent()
+    {
+        RgfBlazorConfiguration.RegisterEntityComponent<ProductComponent>("RG_Product_1");
+        //RgfBlazorConfiguration.RegisterEntityComponent<OrderComponent>("RG_Orders_1");
     }
 }

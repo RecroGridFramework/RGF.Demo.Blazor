@@ -32,10 +32,4 @@ public static class Configure
 #endif
         return builder;
     }
-
-    public static void RegisterEntityComponent()
-    {
-        //RgfBlazorConfiguration.RegisterEntityComponent<ProductComponent>("RG_Product_1");
-        //RgfBlazorConfiguration.RegisterEntityComponent<OrderComponent>("RG_Orders_1");
-    }
 }
