@@ -21,7 +21,7 @@
                         <option value="@lib">@lib</option>
                     }
                 </select>
-                <select value="@_currentLanguage" @onchange="OnLanguageSelectionChanged">
+                <select value="@_recroSec.UserLanguage" @onchange="OnLanguageSelectionChanged">
                     @foreach (var language in _recroDict.Languages)
                     {
                         <option value="@language.Key">@language.Value</option>

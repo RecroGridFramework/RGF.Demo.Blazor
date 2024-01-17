@@ -22,6 +22,9 @@ public partial class MainLayout
     IRecroDictService _recroDict { get; set; } = null!;
 
     [Inject]
+    IRecroSecService _recroSec { get; set; } = null!;
+
+    [Inject]
     IJSRuntime _jsRuntime { get; set; } = null!;
 
     [Inject]
@@ -32,8 +35,6 @@ public partial class MainLayout
 
     private bool _initialized { get; set; }
 
-    private string _currentLanguage { get; set; } = string.Empty;
-
     private string _currentLibrary { get; set; } = "Bootstrap";
 
     private Type? _libraryWrapper { get; set; }
@@ -42,7 +43,7 @@ public partial class MainLayout
 
     private RenderFragment? _themes { get; set; }
 
-    private List<string> Libraries = new() { 
+    private List<string> Libraries = new() {
         "Bootstrap",
 #if DevExpressEnabled
         "DevExpress",
@@ -57,22 +58,28 @@ public partial class MainLayout
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _currentLanguage = _recroDict.DefaultLanguage;
         await InitLibrary();
+        _recroSec.LanguageChangedEvent.Subscribe((arg) => Recreate());
+    }
+
+    private void Recreate()
+    {
+        _initialized = false;
+        StateHasChanged();
+        _ = Task.Run(() =>
+        {
+            _initialized = true;
+            StateHasChanged();
+        });
     }
 
     private void OnLanguageSelectionChanged(ChangeEventArgs args)
     {
-        _initialized = false;
-        StateHasChanged();
-
-        _currentLanguage = args.Value?.ToString() ?? string.Empty;
-        _ = Task.Run(async () =>
+        var language = args.Value?.ToString() ?? string.Empty;
+        if (!string.IsNullOrEmpty(language))
         {
-            await _recroDict.SetDefaultLanguageAsync(_currentLanguage);
-            _initialized = true;
-            StateHasChanged();
-        });
+            _ = _recroSec.SetUserLanguageAsync(language);
+        }
     }
 
     private void OnLibrarySelectionChanged(ChangeEventArgs args)
