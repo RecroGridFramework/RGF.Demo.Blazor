@@ -58,6 +58,11 @@ public partial class MainLayout
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        var lib = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "RGF.Demo.Library");
+        if (!string.IsNullOrEmpty(lib))
+        {
+            _currentLibrary = lib;
+        }
         await InitLibrary();
         _recroSec.LanguageChangedEvent.Subscribe((arg) => Recreate());
     }
@@ -91,6 +96,7 @@ public partial class MainLayout
         _currentLibrary = args.Value?.ToString() ?? string.Empty;
         _ = Task.Run(async () =>
         {
+            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "RGF.Demo.Library", _currentLibrary);
             switch (prev)
             {
                 case "Bootstrap":
