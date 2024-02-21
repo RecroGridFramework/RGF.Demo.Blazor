@@ -10,8 +10,8 @@
 
   <PropertyGroup>
     <Company>Recrovit Kft.</Company>
-    <Product>RecroGrid Framework Demo Client Blazor</Product>
-    <Version>8.2.0</Version>
+    <Product>RecroGrid Framework Demo</Product>
+    <Version>8.3.0</Version>
     <FileVersion>$(Version).1$([System.DateTime]::Now.ToString(MMdd))</FileVersion>
   </PropertyGroup>
 
@@ -25,17 +25,17 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.0" />
-    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.RadzenUI" Version="8.2.0" />
-    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI" Version="8.2.0" />
-    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.UI" Version="8.2.0" />
+    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.RadzenUI" Version="8.3.0" />
+    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI" Version="8.3.0" />
+    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.UI" Version="8.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition="$(DefineConstants.Contains('DevExpressEnabled'))">
-    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.DevExpressUI" Version="8.2.0" />
+    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.DevExpressUI" Version="8.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition="$(DefineConstants.Contains('TelerikEnabled'))">
-    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.TelerikUI" Version="8.2.0" />
+    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.TelerikUI" Version="8.3.0" />
   </ItemGroup>
 
   <ItemGroup>
