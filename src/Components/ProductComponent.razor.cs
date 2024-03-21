@@ -3,7 +3,6 @@ using Recrovit.RecroGridFramework.Abstraction.Contracts.API;
 using Recrovit.RecroGridFramework.Abstraction.Contracts.Services;
 using Recrovit.RecroGridFramework.Abstraction.Models;
 using Recrovit.RecroGridFramework.Client.Blazor.Components;
-using Recrovit.RecroGridFramework.Client.Blazor.Events;
 using Recrovit.RecroGridFramework.Client.Blazor.Parameters;
 using Recrovit.RecroGridFramework.Client.Blazor.UI.Components;
 using Recrovit.RecroGridFramework.Client.Events;
@@ -11,7 +10,7 @@ using Recrovit.RecroGridFramework.Client.Handlers;
 
 namespace RGF.Demo.Blazor.Components;
 
-public partial class ProductComponent
+public partial class ProductComponent : IDisposable
 {
     [Inject]
     private ILogger<ProductComponent> _logger { get; set; } = null!;
@@ -29,37 +28,35 @@ public partial class ProductComponent
         base.OnInitialized();
 
         EntityParameters.EventDispatcher.Subscribe(RgfEntityEventKind.Initialized, OnEntityInitialized);
-        //FormParameter.FormItemLayout = (param) => @<div>@param.Property.Alias</div>;
-        //GridParameter.GridColumnTemplate = (param) => @<div>@param.PropDesc.Alias</div>;
+        EntityParameters.ToolbarParameters.MenuEventDispatcher.Subscribe(OnMenuCommandAsync);
 
-        //FormParameter.EventDispatcher.Subscribe(FormViewEventKind.ValidationRequested, OnValidationRequested);
-        //FormParameter.EventDispatcher.Subscribe(FormViewEventKind.FormDataInitialized, (sender, args) => _logger.LogInformation("EventKind: {0}", args.Args.EventKind));
-        //FormParameter.OnSaveAsync = OnSaveAsync;
+        //FormParameter.FormItemLayoutTemplate = (param) => @<div>@param.Property.Alias</div>;
+        //GridParameter.ColumnTemplate = (param) => @<div>@param.PropDesc.Alias</div>;
+
+        FormParameter.EventDispatcher.Subscribe(RgfFormEventKind.ValidationRequested, OnValidationRequested);
+        FormParameter.EventDispatcher.Subscribe(RgfFormEventKind.FormDataInitialized, (args) => _logger.LogInformation("EventKind: {0}", args.Args.EventKind));
+        FormParameter.OnSaveAsync = OnSaveAsync;
     }
 
     private void OnEntityInitialized(IRgfEventArgs<RgfEntityEventArgs> arg)
     {
-        if (arg.Args.Manager!= null)
-        {
-            arg.Args.Manager.NotificationManager.Subscribe<RgfMenuEventArgs>(this, OnMenuCommandAsync);
-        }
+        _logger.LogInformation("OnEntity{EventKind}", arg.Args.EventKind);
     }
 
-    private async Task OnMenuCommandAsync(IRgfEventArgs<RgfMenuEventArgs> args)
+    private async Task OnMenuCommandAsync(IRgfEventArgs<RgfMenuEventArgs> arg)
     {
-        var menuItem = args.Args;
+        var menuItem = arg.Args;
         _logger.LogDebug("OnMenuCommand: {command}", menuItem.Command);
         if (menuItem.MenuType == RgfMenuType.Function)
         {
             var result = await Manager.ListHandler.CallCustomFunctionAsync(menuItem.Command, true);
             if (result != null)
             {
+                arg.Handled = arg.PreventDefault = true;
                 Manager.BroadcastMessages(result.Messages, this);
             }
             return;
         }
-
-        Manager.NotificationManager.RaiseEvent(new RgfUserMessage(Manager.RecroDict, UserMessageType.Error, "This type of menu option is currently not implemented."), this);
     }
 
     private async Task<RgfResult<RgfFormResult>> OnSaveAsync(RgfFormComponent component, bool refresh)
@@ -68,8 +65,13 @@ public partial class ProductComponent
         return await component.OnSaveAsync(refresh);
     }
 
-    private void OnValidationRequested(object? sender, IRgfEventArgs<RgfFormEventArgs> args)
+    private void OnValidationRequested(IRgfEventArgs<RgfFormEventArgs> arg)
     {
-        _logger.LogInformation("EventKind: {0}, Alias: {1}", args.Args.EventKind, args.Args.Property?.Alias);
+        _logger.LogInformation("EventKind: {0}, Alias: {1}", arg.Args.EventKind, arg.Args.Property?.Alias);
+    }
+
+    public void Dispose()
+    {
+        EntityParameters.ToolbarParameters.MenuEventDispatcher.Unsubscribe(OnMenuCommandAsync);
     }
 }
