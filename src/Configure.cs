@@ -12,7 +12,7 @@ public static class Configure
         {
             var provider = builder.Configuration.GetValue<string>("Oidc:Provider", "Duende");
             builder.Configuration.Bind($"Oidc:{provider}:ProviderOptions", options.ProviderOptions);
-            builder.Configuration.Bind($"Oidc:{provider}:UserOptions", options.UserOptions);
+            //builder.Configuration.Bind($"Oidc:{provider}:UserOptions", options.UserOptions);
         });
 
         var loggerFactory = builder.Services.BuildServiceProvider().GetRequiredService<ILoggerFactory>();
