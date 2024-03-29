@@ -27,7 +27,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.0" />
     <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.RadzenUI" Version="8.4.0" />
     <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI" Version="8.4.0" />
-    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.UI" Version="8.4.0" />
+    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.UI" Version="8.4.1" />
   </ItemGroup>
 
   <ItemGroup Condition="$(DefineConstants.Contains('DevExpressEnabled'))">
