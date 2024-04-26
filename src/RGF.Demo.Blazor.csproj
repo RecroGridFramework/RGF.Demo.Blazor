@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DefineConstants>$(DefineConstants);DevExpressEnabled</DefineConstants>
-    <DefineConstants>$(DefineConstants);TelerikEnabled</DefineConstants>
+    <!--<DefineConstants>$(DefineConstants);DevExpressEnabled</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);TelerikEnabled</DefineConstants>-->
   </PropertyGroup>
 
   <ItemGroup>
