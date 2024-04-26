@@ -1,0 +1,11 @@
+﻿@using Recrovit.RecroGridFramework.Client.Blazor.Parameters
+@using Recrovit.RecroGridFramework.Client.Blazor.UI.Components
+
+<EntityComponent EntityParameters="EntityParameters">
+</EntityComponent>
+
+@code {
+
+    [Parameter]
+    public RgfEntityParameters EntityParameters { get; set; } = new RgfEntityParameters("RG_OrderDetails_1");
+}

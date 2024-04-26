@@ -190,5 +190,6 @@ public partial class MainLayout
     {
         RgfBlazorConfiguration.RegisterEntityComponent<ProductComponent>("RG_Product_1");
         //RgfBlazorConfiguration.RegisterEntityComponent<OrderComponent>("RG_Orders_1");
+        RgfBlazorConfiguration.RegisterEntityComponent<OrderDetailsComponent>("RG_OrderDetails_1");
     }
 }

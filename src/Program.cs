@@ -15,6 +15,5 @@ builder.ConfigureServices();
 var host = builder.Build();
 
 await host.Services.InitializeRgfBlazorAsync();
-//Configure.RegisterEntityComponent();
 
 await host.RunAsync();
