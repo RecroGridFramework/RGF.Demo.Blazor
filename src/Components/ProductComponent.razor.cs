@@ -3,7 +3,6 @@ using Recrovit.RecroGridFramework.Abstraction.Contracts.API;
 using Recrovit.RecroGridFramework.Abstraction.Contracts.Services;
 using Recrovit.RecroGridFramework.Abstraction.Models;
 using Recrovit.RecroGridFramework.Client.Blazor.Components;
-using Recrovit.RecroGridFramework.Client.Blazor.Parameters;
 using Recrovit.RecroGridFramework.Client.Blazor.UI.Components;
 using Recrovit.RecroGridFramework.Client.Events;
 using Recrovit.RecroGridFramework.Client.Handlers;
@@ -19,10 +18,6 @@ public partial class ProductComponent : IDisposable
 
     private IRgManager Manager => EntityParameters.Manager ?? throw new MemberAccessException();
 
-    public RgfFormParameters FormParameter { get; set; } = new();
-
-    public RgfGridParameters GridParameter { get; set; } = new();
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -33,9 +28,9 @@ public partial class ProductComponent : IDisposable
         //FormParameter.FormItemLayoutTemplate = (param) => @<div>@param.Property.Alias</div>;
         //GridParameter.ColumnTemplate = (param) => @<div>@param.PropDesc.Alias</div>;
 
-        FormParameter.EventDispatcher.Subscribe(RgfFormEventKind.ValidationRequested, OnValidationRequested);
-        FormParameter.EventDispatcher.Subscribe(RgfFormEventKind.FormDataInitialized, (args) => _logger.LogInformation("EventKind: {0}", args.Args.EventKind));
-        FormParameter.OnSaveAsync = OnSaveAsync;
+        EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.ValidationRequested, OnValidationRequested);
+        EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.FormDataInitialized, (args) => _logger.LogInformation("EventKind: {0}", args.Args.EventKind));
+        EntityParameters.FormParameters.OnSaveAsync = OnSaveAsync;
     }
 
     private void OnEntityInitialized(IRgfEventArgs<RgfEntityEventArgs> arg)
@@ -59,10 +54,10 @@ public partial class ProductComponent : IDisposable
         }
     }
 
-    private async Task<RgfResult<RgfFormResult>> OnSaveAsync(RgfFormComponent component, bool refresh)
+    private Task<RgfResult<RgfFormResult>> OnSaveAsync(RgfFormComponent component, bool refresh)
     {
         _logger.LogInformation("OnSaveAsync");
-        return await component.OnSaveAsync(refresh);
+        return component.OnSaveAsync(refresh);
     }
 
     private void OnValidationRequested(IRgfEventArgs<RgfFormEventArgs> arg)
