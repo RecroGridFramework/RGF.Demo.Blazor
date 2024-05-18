@@ -47,7 +47,7 @@ public partial class ProductComponent : IDisposable
             var result = await Manager.ListHandler.CallCustomFunctionAsync(menuItem.Command, true);
             if (result != null)
             {
-                arg.Handled = arg.PreventDefault = true;
+                arg.Handled = true;
                 Manager.BroadcastMessages(result.Messages, this);
             }
             return;
