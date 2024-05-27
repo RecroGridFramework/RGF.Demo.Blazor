@@ -100,7 +100,7 @@ public partial class MainLayout
             switch (prev)
             {
                 case "Bootstrap":
-                    await Recrovit.RecroGridFramework.Client.Blazor.UI.RGFClientBlazorUIConfiguration.UnloadResourcesAsync(_jsRuntime);
+                    await RGFClientBlazorUIConfiguration.UnloadResourcesAsync(_jsRuntime);
                     RgfBlazorConfiguration.ClearEntityComponentTypes();
                     break;
 #if DevExpressEnabled
@@ -109,11 +109,11 @@ public partial class MainLayout
                     break;
 #endif
                 case "Radzen":
-                    await Recrovit.RecroGridFramework.Client.Blazor.RadzenUI.RGFClientBlazorRadzenConfiguration.UnloadResourcesAsync(_jsRuntime);
+                    await RGFClientBlazorRadzenConfiguration.UnloadResourcesAsync(_jsRuntime);
                     break;
 
                 case "Syncfusion":
-                    await Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI.RGFClientBlazorSyncfusionConfiguration.UnloadResourcesAsync(_jsRuntime);
+                    await RGFClientBlazorSyncfusionConfiguration.UnloadResourcesAsync(_jsRuntime);
                     break;
 #if TelerikEnabled
                 case "Telerik":
