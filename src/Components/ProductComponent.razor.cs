@@ -38,20 +38,14 @@ public partial class ProductComponent : IDisposable
         _logger.LogInformation("OnEntity{EventKind}", arg.Args.EventKind);
     }
 
-    private async Task OnMenuCommandAsync(IRgfEventArgs<RgfMenuEventArgs> arg)
+    private Task OnMenuCommandAsync(IRgfEventArgs<RgfMenuEventArgs> arg)
     {
-        var menuItem = arg.Args;
-        _logger.LogDebug("OnMenuCommand: {command}", menuItem.Command);
-        if (menuItem.MenuType == RgfMenuType.Function)
+        var menuEventArgs = arg.Args;
+        _logger.LogDebug("OnMenuCommand: {command}", menuEventArgs.Command);
+        if (menuEventArgs.MenuType == RgfMenuType.Function)
         {
-            var result = await Manager.ListHandler.CallCustomFunctionAsync(menuItem.Command, true);
-            if (result != null)
-            {
-                arg.Handled = true;
-                Manager.BroadcastMessages(result.Messages, this);
-            }
-            return;
         }
+        return Task.CompletedTask;
     }
 
     private Task<RgfResult<RgfFormResult>> OnSaveAsync(RgfFormComponent component, bool refresh)
