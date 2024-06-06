@@ -1,21 +1,77 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Recrovit.RecroGridFramework.Abstraction.Contracts.Services;
+using Recrovit.RecroGridFramework.Abstraction.Models;
 using Recrovit.RecroGridFramework.Client.Blazor.Components;
+using Recrovit.RecroGridFramework.Client.Blazor.Parameters;
 using Recrovit.RecroGridFramework.Client.Events;
 using RGF.Demo.Northwind.Common.Validation;
+using System.Globalization;
 
 namespace RGF.Demo.Blazor.Components;
 
-public partial class OrderDetailsComponent : ComponentBase, IDisposable
+public partial class OrderDetailsComponent : ComponentBase, IDisposable, IAsyncDisposable
 {
     [Inject]
     private IRecroDictService _recroDictService { get; set; } = null!;
+
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; } = null!;
+
+    private IJSObjectReference? module;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
         EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.ValidationRequested, OnValidationRequestedAsync);
+        EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.AfterRender, OnAfterRenderForm);
+        EntityParameters.FormParameters.FormItemTemplate = CreateFormItemTemplate;
+    }
+    public void Dispose()
+    {
+        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.ValidationRequested, OnValidationRequestedAsync);
+        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.AfterRender, OnAfterRenderForm);
+    }
+
+    private void OnAfterRenderForm(IRgfEventArgs<RgfFormEventArgs> args)
+    {
+        UpdateTooltip();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/OrderDetailsComponent.razor.js");
+        }
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (module != null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+
+    private RenderFragment CreateFormItemTemplate(RgfFormItemParameters param)
+    {
+        if (param.Property.Alias.Equals("Discount", StringComparison.OrdinalIgnoreCase))
+        {
+            param.Property.PropertyDesc.FormType = PropertyFormType.Custom;
+            if (param.ItemData.DoubleValue != null)
+            {
+                param.ItemData.Value = ((double)param.ItemData.DoubleValue).ToString(new CultureInfo("en"));
+            }
+            return (builder) =>
+            {
+                //builder.AddMarkupContent(0, $"<div>{param.Property.PropertyDesc.ColTitle}</div>");
+                builder.AddContent(1, param.BaseFormComponent.FormItemTemplate(param));
+                builder.AddContent(2, CustomFormItem(param));
+            };
+        }
+        return param.BaseFormComponent.FormItemTemplate(param);
     }
 
     private async Task OnValidationRequestedAsync(IRgfEventArgs<RgfFormEventArgs> arg)
@@ -36,10 +92,5 @@ public partial class OrderDetailsComponent : ComponentBase, IDisposable
         //}
 
         await OrderDetailValidation.ValidateAsync(form.FormData.DataRec, form.FormValidation, _recroDictService, arg.Args.FieldId?.FieldName);
-    }
-
-    public void Dispose()
-    {
-        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.ValidationRequested, OnValidationRequestedAsync);
     }
 }

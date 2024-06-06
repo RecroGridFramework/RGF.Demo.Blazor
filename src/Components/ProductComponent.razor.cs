@@ -25,9 +25,6 @@ public partial class ProductComponent : IDisposable
         EntityParameters.EventDispatcher.Subscribe(RgfEntityEventKind.Initialized, OnEntityInitialized);
         EntityParameters.ToolbarParameters.MenuEventDispatcher.Subscribe(OnMenuCommandAsync);
 
-        //FormParameter.FormItemLayoutTemplate = (param) => @<div>@param.Property.Alias</div>;
-        //GridParameter.ColumnTemplate = (param) => @<div>@param.PropDesc.Alias</div>;
-
         EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.ValidationRequested, OnValidationRequested);
         EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.FormDataInitialized, (args) => _logger.LogInformation("EventKind: {0}", args.Args.EventKind));
         EntityParameters.FormParameters.OnSaveAsync = OnSaveAsync;
