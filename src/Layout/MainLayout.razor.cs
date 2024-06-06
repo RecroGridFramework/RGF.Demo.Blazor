@@ -137,6 +137,7 @@ public partial class MainLayout
                 _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.UI.Components.RgfRootComponent);
                 await _serviceProvider.InitializeRgfUIAsync("light");
                 InitComponents(typeof(Recrovit.RecroGridFramework.Client.Blazor.UI.Components.MenuComponent), typeof(Recrovit.RecroGridFramework.Client.Blazor.UI.Components.SetTheme), "light");
+                await _jsRuntime.InvokeVoidAsync("eval", $"$('body').addClass('small')");
                 RegisterEntityComponent();
                 break;
 #if DevExpressEnabled
@@ -182,6 +183,10 @@ public partial class MainLayout
         {
             builder.OpenComponent(0, themes);
             builder.AddAttribute(1, "ThemeName", themeName);
+            if (_currentLibrary == "Bootstrap")
+            {
+                builder.AddAttribute(2, "Size", "small");
+            }
             builder.CloseComponent();
         };
     }
