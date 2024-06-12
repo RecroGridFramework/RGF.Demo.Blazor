@@ -18,7 +18,7 @@ public partial class OrderDetailsComponent : ComponentBase, IDisposable, IAsyncD
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = null!;
 
-    private IJSObjectReference? module;
+    private IJSObjectReference? _module;
 
     protected override void OnInitialized()
     {
@@ -27,11 +27,6 @@ public partial class OrderDetailsComponent : ComponentBase, IDisposable, IAsyncD
         EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.ValidationRequested, OnValidationRequestedAsync);
         EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.AfterRender, OnAfterRenderForm);
         EntityParameters.FormParameters.FormItemTemplate = CreateFormItemTemplate;
-    }
-    public void Dispose()
-    {
-        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.ValidationRequested, OnValidationRequestedAsync);
-        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.AfterRender, OnAfterRenderForm);
     }
 
     private void OnAfterRenderForm(IRgfEventArgs<RgfFormEventArgs> args)
@@ -43,15 +38,7 @@ public partial class OrderDetailsComponent : ComponentBase, IDisposable, IAsyncD
     {
         if (firstRender)
         {
-            module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/OrderDetailsComponent.razor.js");
-        }
-    }
-
-    async ValueTask IAsyncDisposable.DisposeAsync()
-    {
-        if (module != null)
-        {
-            await module.DisposeAsync();
+            _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/OrderDetailsComponent.razor.js");
         }
     }
 
@@ -66,7 +53,7 @@ public partial class OrderDetailsComponent : ComponentBase, IDisposable, IAsyncD
             }
             return (builder) =>
             {
-                //builder.AddMarkupContent(0, $"<div>{param.Property.PropertyDesc.ColTitle}</div>");
+                //builder.AddMarkupContent(0, $"<div>Custom {param.Property.PropertyDesc.ColTitle}</div>");
                 builder.AddContent(1, param.BaseFormComponent.FormItemTemplate(param));
                 builder.AddContent(2, CustomFormItem(param));
             };
@@ -92,5 +79,19 @@ public partial class OrderDetailsComponent : ComponentBase, IDisposable, IAsyncD
         //}
 
         await OrderDetailValidation.ValidateAsync(form.FormData.DataRec, form.FormValidation, _recroDictService, arg.Args.FieldId?.FieldName);
+    }
+
+    public void Dispose()
+    {
+        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.ValidationRequested, OnValidationRequestedAsync);
+        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.AfterRender, OnAfterRenderForm);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_module != null)
+        {
+            await _module.DisposeAsync();
+        }
     }
 }

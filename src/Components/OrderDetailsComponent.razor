@@ -11,10 +11,10 @@
 
     private RenderFragment CustomFormItem(RgfFormItemParameters param) =>
         @<input id="customRange1" @bind="param.ItemData.StringValue" type="range" class="form-range" min="0" max="1" step="0.01"
-           data-bs-toggle="tooltip" title="@param.ItemData.StringValue" style="cursor:pointer" @oninput="@((arg) => UpdateTooltip(arg.Value))">;
+           data-bs-toggle="tooltip" style="cursor:pointer" @oninput="@((arg) => UpdateTooltip(arg.Value))">;
 
     private void UpdateTooltip(object? value = null)
     {
-        _ = module?.InvokeVoidAsync("discountTooltip", "customRange1", value);
+        _ = _module?.InvokeVoidAsync("discountTooltip", "customRange1", value);
     }
 }
