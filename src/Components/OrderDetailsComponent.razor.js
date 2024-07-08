@@ -9,9 +9,9 @@
         }
         rangeInput._tooltipInstance.dispose();
     }
-    if (value != null) {
-        rangeInput.setAttribute('title', value);
-    }
+
+    rangeInput.setAttribute('title', ((value ?? rangeInput.value) * 100).toFixed(0) + '%');
+
     var tooltip = new bootstrap.Tooltip(rangeInput);
     rangeInput._tooltipInstance = tooltip;
     if (value != null) {
