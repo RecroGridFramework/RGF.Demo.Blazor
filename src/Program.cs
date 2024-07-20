@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Recrovit.RecroGridFramework.Blazor.RgfApexCharts;
 using Recrovit.RecroGridFramework.Client.Blazor;
 using RGF.Demo.Blazor;
 
@@ -15,5 +16,6 @@ builder.ConfigureServices();
 var host = builder.Build();
 
 await host.Services.InitializeRgfBlazorAsync();
+await host.Services.InitializeRGFBlazorApexChartsAsync();
 
 await host.RunAsync();
