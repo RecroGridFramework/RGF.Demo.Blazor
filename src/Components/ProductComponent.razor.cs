@@ -26,7 +26,7 @@ public partial class ProductComponent : IDisposable
         EntityParameters.ToolbarParameters.MenuEventDispatcher.Subscribe(OnMenuCommandAsync);
 
         EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.ValidationRequested, OnValidationRequested);
-        EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.FormDataInitialized, (args) => _logger.LogInformation("EventKind: {0}", args.Args.EventKind));
+        EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.FormDataInitialized, OnFormDataInitialized);
         EntityParameters.FormParameters.OnSaveAsync = OnSaveAsync;
     }
 
@@ -56,8 +56,16 @@ public partial class ProductComponent : IDisposable
         _logger.LogInformation("EventKind: {0}, Alias: {1}", arg.Args.EventKind, arg.Args.Property?.Alias);
     }
 
+    private void OnFormDataInitialized(IRgfEventArgs<RgfFormEventArgs> args)
+    {
+        _logger.LogInformation("EventKind: {0}", args.Args.EventKind);
+    }
+
     public void Dispose()
     {
         EntityParameters.ToolbarParameters.MenuEventDispatcher.Unsubscribe(OnMenuCommandAsync);
+        EntityParameters.EventDispatcher.Unsubscribe(RgfEntityEventKind.Initialized, OnEntityInitialized);
+        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.ValidationRequested, OnValidationRequested);
+        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.FormDataInitialized, OnFormDataInitialized);
     }
 }
