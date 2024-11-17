@@ -19,31 +19,26 @@ namespace RGF.Demo.Blazor.Layout;
 public partial class MainLayout
 {
     [Inject]
-    IRecroDictService _recroDict { get; set; } = null!;
+    private IRecroDictService _recroDict { get; init; } = null!;
 
     [Inject]
-    IRecroSecService _recroSec { get; set; } = null!;
+    private IRecroSecService _recroSec { get; init; } = null!;
 
     [Inject]
-    IJSRuntime _jsRuntime { get; set; } = null!;
+    private IJSRuntime _jsRuntime { get; init; } = null!;
 
     [Inject]
-    IServiceProvider _serviceProvider { get; set; } = null!;
+    private IServiceProvider _serviceProvider { get; init; } = null!;
 
     [Inject]
-    IConfiguration _configuration { get; set; } = null!;
+    private IConfiguration _configuration { get; init; } = null!;
 
-    private bool _initialized { get; set; }
-
-    private string _currentLibrary { get; set; } = "Bootstrap";
-
-    private Type? _libraryWrapper { get; set; }
-
-    private RenderFragment? _menu { get; set; }
-
-    private RenderFragment? _themes { get; set; }
-
-    private List<string> Libraries = new() {
+    private bool _initialized;
+    private string _currentLibrary = "Bootstrap";
+    private Type? _libraryWrapper;
+    private RenderFragment? _menu;
+    private RenderFragment? _themes;
+    private readonly List<string> Libraries = [
         "Bootstrap",
 #if DevExpressEnabled
         "DevExpress",
@@ -53,7 +48,7 @@ public partial class MainLayout
 #if TelerikEnabled
         "Telerik"
 #endif
-    };
+    ];
 
     protected override async Task OnInitializedAsync()
     {
@@ -135,7 +130,7 @@ public partial class MainLayout
         {
             case "Bootstrap":
                 _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.UI.Components.RgfRootComponent);
-                await _serviceProvider.InitializeRgfUIAsync("light", shouldLoadBundledStyles: false);
+                await _serviceProvider.InitializeRgfUIAsync("light");
                 InitComponents(typeof(Recrovit.RecroGridFramework.Client.Blazor.UI.Components.MenuComponent), typeof(Recrovit.RecroGridFramework.Client.Blazor.UI.Components.SetTheme), "light");
                 await _jsRuntime.InvokeVoidAsync("eval", $"$('body').addClass('small')");
                 RegisterEntityComponent();
@@ -143,26 +138,26 @@ public partial class MainLayout
 #if DevExpressEnabled
             case "DevExpress":
                 _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.DevExpressUI.Components.RgfRootComponent);
-                await _serviceProvider.InitializeRgfDevExpressUIAsync("blazing-berry.bs5", shouldLoadBundledStyles: false);
+                await _serviceProvider.InitializeRgfDevExpressUIAsync("blazing-berry.bs5");
                 InitComponents(typeof(Recrovit.RecroGridFramework.Client.Blazor.DevExpressUI.Components.MenuComponent), typeof(Recrovit.RecroGridFramework.Client.Blazor.DevExpressUI.Components.SetTheme), "blazing-berry.bs5");
                 break;
 #endif
             case "Radzen":
                 _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.RadzenUI.Components.RgfRootComponent);
-                await _serviceProvider.InitializeRgfRadzenUIAsync("default", shouldLoadBundledStyles: false);
+                await _serviceProvider.InitializeRgfRadzenUIAsync("default");
                 InitComponents(typeof(Recrovit.RecroGridFramework.Client.Blazor.RadzenUI.Components.MenuComponent), typeof(Recrovit.RecroGridFramework.Client.Blazor.RadzenUI.Components.SetTheme), "default");
                 break;
 
             case "Syncfusion":
                 _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI.Components.RgfRootComponent);
-                await _serviceProvider.InitializeRgfSyncfusionUIAsync("tailwind", shouldLoadBundledStyles: false);
+                await _serviceProvider.InitializeRgfSyncfusionUIAsync("tailwind");
                 InitComponents(typeof(Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI.Components.MenuComponent), typeof(Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI.Components.SetTheme), "tailwind");
                 break;
 #if TelerikEnabled
             case "Telerik":
                 _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.TelerikUI.Components.RgfRootComponent);
                 bool trial = _configuration.GetValue<bool>("Telerik:Trial", true);
-                await _serviceProvider.InitializeRgfTelerikUIAsync("kendo-theme-default/all", trial, shouldLoadBundledStyles: false);
+                await _serviceProvider.InitializeRgfTelerikUIAsync("kendo-theme-default/all", trial);
                 InitComponents(typeof(Recrovit.RecroGridFramework.Client.Blazor.TelerikUI.Components.MenuComponent), typeof(Recrovit.RecroGridFramework.Client.Blazor.TelerikUI.Components.SetTheme), "kendo-theme-default/all");
                 break;
 #endif
