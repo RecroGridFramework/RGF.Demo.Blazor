@@ -14,6 +14,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.ConfigureServices();
 var host = builder.Build();
 
-await host.Services.InitializeRgfBlazorAsync(shouldLoadBundledStyles: false);
+await host.Services.InitializeRgfBlazorAsync();
 
 await host.RunAsync();
