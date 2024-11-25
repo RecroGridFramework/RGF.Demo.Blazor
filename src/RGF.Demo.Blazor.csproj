@@ -28,6 +28,7 @@
     <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.RadzenUI" Version="8.12.0" />
     <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.SyncfusionUI" Version="8.12.0" />
     <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor.UI" Version="8.12.2" />
+    <PackageReference Include="Recrovit.RecroGridFramework.Client.Blazor" Version="8.12.3" />
   </ItemGroup>
 
   <ItemGroup Condition="$(DefineConstants.Contains('DevExpressEnabled'))">
