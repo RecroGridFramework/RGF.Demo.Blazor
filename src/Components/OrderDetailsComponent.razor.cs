@@ -25,7 +25,7 @@ public partial class OrderDetailsComponent : ComponentBase, IDisposable, IAsyncD
         base.OnInitialized();
 
         EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.ValidationRequested, OnValidationRequestedAsync);
-        EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.AfterRender, OnAfterRenderForm);
+        EntityParameters.FormParameters.EventDispatcher.Subscribe(RgfFormEventKind.Rendered, OnAfterRenderForm);
         EntityParameters.FormParameters.FormItemTemplate = CreateFormItemTemplate;
     }
 
@@ -36,6 +36,7 @@ public partial class OrderDetailsComponent : ComponentBase, IDisposable, IAsyncD
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        await base.OnAfterRenderAsync(firstRender);
         if (firstRender)
         {
             _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/OrderDetailsComponent.razor.js");
@@ -84,7 +85,7 @@ public partial class OrderDetailsComponent : ComponentBase, IDisposable, IAsyncD
     public void Dispose()
     {
         EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.ValidationRequested, OnValidationRequestedAsync);
-        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.AfterRender, OnAfterRenderForm);
+        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.Rendered, OnAfterRenderForm);
     }
 
     public async ValueTask DisposeAsync()
