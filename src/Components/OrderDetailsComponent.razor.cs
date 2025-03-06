@@ -84,8 +84,7 @@ public partial class OrderDetailsComponent : ComponentBase, IDisposable, IAsyncD
 
     public void Dispose()
     {
-        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.ValidationRequested, OnValidationRequestedAsync);
-        EntityParameters.FormParameters.EventDispatcher.Unsubscribe(RgfFormEventKind.Rendered, OnAfterRenderForm);
+        EntityParameters?.UnsubscribeFromAll(this);
     }
 
     public async ValueTask DisposeAsync()
