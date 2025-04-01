@@ -38,7 +38,7 @@ public partial class ProductComponent : IDisposable
     private Task OnMenuCommandAsync(IRgfEventArgs<RgfMenuEventArgs> arg)
     {
         var menuEventArgs = arg.Args;
-        _logger.LogDebug("OnMenuCommand: {command}", menuEventArgs.Command);
+        _logger.LogDebug("OnMenuCommand | Command:{command}", menuEventArgs.Command);
         if (menuEventArgs.MenuType == RgfMenuType.Function)
         {
         }
