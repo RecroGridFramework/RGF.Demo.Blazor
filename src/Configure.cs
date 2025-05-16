@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Recrovit.RecroGridFramework.Client.Blazor;
+using Recrovit.RecroGridFramework.Client.Blazor.Handlers;
 using Syncfusion.Blazor;
 
 namespace RGF.Demo.Blazor;
@@ -12,7 +13,9 @@ public static class Configure
         {
             var provider = builder.Configuration.GetValue<string>("Oidc:Provider", "Duende");
             builder.Configuration.Bind($"Oidc:{provider}:ProviderOptions", options.ProviderOptions);
+            //builder.Configuration.Bind($"Oidc:{provider}:AuthenticationPaths", options.AuthenticationPaths);
             //builder.Configuration.Bind($"Oidc:{provider}:UserOptions", options.UserOptions);
+            RgfAuthorizationMessageHandler.LoginPath = options.AuthenticationPaths.LogInPath;
         });
 
         var loggerFactory = builder.Services.BuildServiceProvider().GetRequiredService<ILoggerFactory>();
