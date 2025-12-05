@@ -157,8 +157,7 @@ public partial class MainLayout
 #if TelerikEnabled
             case "Telerik":
                 _libraryWrapper = typeof(Recrovit.RecroGridFramework.Client.Blazor.TelerikUI.Components.RgfRootComponent);
-                bool trial = _configuration.GetValue<bool>("Telerik:Trial", true);
-                await _serviceProvider.InitializeRgfTelerikUIAsync("kendo-theme-default/all", trial);
+                await _serviceProvider.InitializeRgfTelerikUIAsync("kendo-theme-default/all");
                 InitComponents(typeof(Recrovit.RecroGridFramework.Client.Blazor.TelerikUI.Components.MenuComponent), typeof(Recrovit.RecroGridFramework.Client.Blazor.TelerikUI.Components.SetTheme), "kendo-theme-default/all");
                 break;
 #endif
